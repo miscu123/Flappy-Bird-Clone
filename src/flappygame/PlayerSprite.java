@@ -1,33 +1,33 @@
 package flappygame;
 
-import java.io.IOException;
-import java.util.Objects;
-import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
 public class PlayerSprite extends Sprite {
     private int score = 0;
-    private int dy = 0;
+    private float dy = 0;
     private int space = 0;
 
-    public PlayerSprite(int x, int y, int width, int height) {
+    public PlayerSprite(int x, int y, int width, int height, BufferedImage image) {
         super(x, y, width, height);
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Player/StyleBird1/Bird-Init.png")));
-        } catch (IOException | IllegalArgumentException e) {
-            System.err.println("Player image not found!");
-        }
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.image = image;
     }
 
     @Override
     public void move() {
-        int gravity = 1;
+        float gravity = 1.5f;
         dy += gravity;
-        int maxFallSpeed = 10;
+
+        float maxFallSpeed = 10;
         if (dy > maxFallSpeed)
             dy = maxFallSpeed;
 
-        y += dy;
+        y +=(int) dy;
     }
+
 
     public void jump() {
         dy = -15;
@@ -41,6 +41,7 @@ public class PlayerSprite extends Sprite {
     public void addSpace() {
         space++;
     }
+
     public int getScore() {
         return score;
     }

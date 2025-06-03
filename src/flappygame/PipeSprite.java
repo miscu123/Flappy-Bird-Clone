@@ -2,9 +2,6 @@ package flappygame;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
 
 public class PipeSprite {
     private int x;
@@ -14,23 +11,18 @@ public class PipeSprite {
     private final int gap;
     private final int speed;
     private boolean passed = false;
-    private BufferedImage topPipeImg;
-    private BufferedImage bottomPipeImg;
+    private final BufferedImage topPipeImg;
+    private final BufferedImage bottomPipeImg;
 
-    public PipeSprite(int x, int height, int gap, int speed) {
+    public PipeSprite(int x, int height, int gap, int speed, BufferedImage topPipeImg, BufferedImage bottomPipeImg) {
         this.x = x;
         this.width = 80;
         this.gap = gap;
         this.speed = speed;
         this.topHeight = (int)(Math.random() * (height - gap - 100)) + 50;
         this.bottomHeight = height - topHeight - gap;
-
-        try {
-            topPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/Pipe-1.png")));
-            bottomPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/Pipe-2.png")));
-        } catch (IOException | IllegalArgumentException e) {
-            System.err.println("Pipe image not found!");
-        }
+        this.topPipeImg = topPipeImg;
+        this.bottomPipeImg = bottomPipeImg;
     }
 
     public void move() {
