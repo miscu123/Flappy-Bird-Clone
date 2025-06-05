@@ -17,7 +17,6 @@ A Java implementation of the classic Flappy Bird game with configurable difficul
 - Responsive gameplay with smooth animations
 
 ## Installation & Running
-
-### Requirements
 - Java JDK 11 or higher
-- (Optional) Maven for building
+- Import the .sql file into MySQL Workbench
+- run the Main
