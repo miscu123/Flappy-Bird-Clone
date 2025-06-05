@@ -2,11 +2,9 @@
 
 A Java implementation of the classic Flappy Bird game with configurable difficulty levels.
 
-![Gameplay Screenshot](
-Flappy1.PNG)
-(Flappy2.PNG)
-
-) 
+![Gameplay Screenshot](Flappy1.PNG)
+![Gameplay Screenshot](Flappy2.PNG)
+![Gameplay Screenshot](Flappy3.PNG)
 
 ## Features
 
