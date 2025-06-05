@@ -2,7 +2,7 @@
 
 A Java implementation of the classic Flappy Bird game with configurable difficulty levels.
 
-![Gameplay Screenshot](screenshot.png) <!-- Add your screenshot file -->
+![Gameplay Screenshot](Flappy1.PNG) 
 
 ## Features
 
@@ -19,8 +19,3 @@ A Java implementation of the classic Flappy Bird game with configurable difficul
 ### Requirements
 - Java JDK 11 or higher
 - (Optional) Maven for building
-
-### Running the Game
-1. **Using Executable JAR**:
-   ```bash
-   java -jar flappy-bird-clone.jar
