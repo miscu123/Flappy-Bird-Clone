@@ -21,7 +21,7 @@ public class PlayerSprite extends Sprite {
         float gravity = 1.5f;
         dy += gravity;
 
-        float maxFallSpeed = 10;
+        float maxFallSpeed = 7;
         if (dy > maxFallSpeed)
             dy = maxFallSpeed;
 
@@ -30,7 +30,7 @@ public class PlayerSprite extends Sprite {
 
 
     public void jump() {
-        dy = -15;
+        dy = -17;
         addSpace();
     }
 

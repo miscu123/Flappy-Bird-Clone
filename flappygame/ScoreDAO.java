@@ -13,16 +13,18 @@ public class ScoreDAO {
         try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
+            // Player Name
             ps.setString(1, scoreInfo.getName());
+            // Player Score
             ps.setInt(2, scoreInfo.getScore());
+            // The difficulty the player played
             ps.setString(3, scoreInfo.getDifficulty());
-
-            // Data de azi
+            // The date the player played in
             ps.setDate(4, Date.valueOf(LocalDate.now()));
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Could not connect to database " + e.getMessage());
         }
     }
 }

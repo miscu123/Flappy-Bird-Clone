@@ -120,29 +120,29 @@ public class GameBoard extends JPanel {
 
         switch (difficulty) {
             case EASY:
-                pipeInterval = 70;
-                speed = 6;
+                pipeInterval = 130;
+                speed = 5;
                 gap = 300;
                 topPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/PipeEasy.png")));
                 bottomPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/PipeEasy.png")));
                 break;
             case MEDIUM:
-                pipeInterval = 50;
-                speed = 8;
+                pipeInterval = 90;
+                speed = 6;
                 gap = 250;
                 topPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/PipeMed.png")));
                 bottomPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/PipeMed.png")));
                 break;
             case HARD:
-                pipeInterval = 30;
-                speed = 15;
+                pipeInterval = 50;
+                speed = 10;
                 gap = 250;
                 topPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/PipeHardTop.png")));
                 bottomPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/PipeHardBot.png")));
                 break;
             default:
-                pipeInterval = 60;
-                speed = 7;
+                pipeInterval = 150;
+                speed = 4;
                 gap = 320;
                 topPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/PipeEasy.png")));
                 bottomPipeImg = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Tiles/Style 1/PipeEasy.png")));
@@ -317,7 +317,7 @@ public class GameBoard extends JPanel {
     }
 
     public void createTimer() {
-        Timer timer = new Timer(20, _ -> {
+        Timer timer = new Timer(1, _ -> {
             if (gameState == GameState.PLAYING && playerSprite != null) {
                 updatePlayer();
                 try {
@@ -345,7 +345,14 @@ public class GameBoard extends JPanel {
 
     private void saveScore() {
         String playerName = JOptionPane.showInputDialog(this, "Enter your name:", "Game Over", JOptionPane.PLAIN_MESSAGE);
-        if (playerName == null || playerName.trim().isEmpty()) {
+
+        if (playerName == null) {
+            // Cancel pressed
+            return;
+        }
+
+        if (playerName.trim().isEmpty()) {
+            // OK pressed but nothing typed
             playerName = "Anonymous";
         }
 
@@ -356,5 +363,6 @@ public class GameBoard extends JPanel {
         ScoreDAO dao = new ScoreDAO();
         dao.insertScore(scoreInfo);
     }
+
 
 }

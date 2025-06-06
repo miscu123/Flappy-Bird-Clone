@@ -6,13 +6,6 @@ public class ScoreInfo {
     private int score;
     private String difficulty;
 
-    public ScoreInfo(int id, String name, int score, String difficulty) {
-        this.id = id;
-        this.name = name;
-        this.score = score;
-        this.difficulty = difficulty;
-    }
-
     public ScoreInfo(String name, int score, String difficulty) {
         this.name = name;
         this.score = score;
