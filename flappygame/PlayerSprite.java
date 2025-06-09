@@ -18,7 +18,7 @@ public class PlayerSprite extends Sprite {
 
     @Override
     public void move() {
-        float gravity = 1.5f;
+        float gravity = 1.2f;
         dy += gravity;
 
         float maxFallSpeed = 7;
@@ -30,12 +30,8 @@ public class PlayerSprite extends Sprite {
 
 
     public void jump() {
-        dy = -17;
+        dy = -16;
         addSpace();
-    }
-
-    public int getSpace() {
-        return space;
     }
 
     public void addSpace() {

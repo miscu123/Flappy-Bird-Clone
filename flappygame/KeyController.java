@@ -29,7 +29,8 @@ public class KeyController implements KeyListener {
             gameBoard.getPlayerSprite().jump();
         }
 
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE &&
+                (gameBoard.gameState == GameBoard.GameState.PLAYING || gameBoard.gameState == GameBoard.GameState.MENU)) {
             System.exit(0);
         }
     }

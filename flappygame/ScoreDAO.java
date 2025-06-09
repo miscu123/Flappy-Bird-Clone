@@ -2,6 +2,8 @@ package flappygame;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScoreDAO {
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/leaderboard";
@@ -26,5 +28,27 @@ public class ScoreDAO {
         } catch (SQLException e) {
             System.out.println("Could not connect to database " + e.getMessage());
         }
+    }
+
+    public List<ScoreInfo> getAllScores() {
+        List<ScoreInfo> scores = new ArrayList<>();
+        String sql = "SELECT PlayerName, Score, Difficulty FROM leaderboard ORDER BY Score DESC";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                String name = rs.getString("PlayerName");
+                int score = rs.getInt("Score");
+                String difficulty = rs.getString("Difficulty");
+                scores.add(new ScoreInfo(name, score, difficulty));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Could not retrieve scores: " + e.getMessage());
+        }
+
+        return scores;
     }
 }

@@ -23,11 +23,11 @@ public class GameBoard extends JPanel {
     List<PipeSprite> pipes = new ArrayList<>();
     int pipeSpawnCounter = 0;
     Font customFont;
+    private JPanel leaderboardPanel;
 
     public enum GameState {
         MENU,
-        PLAYING,
-        GAME_OVER
+        PLAYING
     }
 
     public enum Difficulty {
@@ -45,7 +45,7 @@ public class GameBoard extends JPanel {
         requestFocusInWindow();
         addKeyListener(new KeyController(this));
 
-        loadFont();
+        loadFont(20);
         loadBackgroundImage();
         drawButtons();
         createTimer();
@@ -58,9 +58,7 @@ public class GameBoard extends JPanel {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 
         if (gameState == GameState.MENU) {
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.PLAIN, 24));
-            g.drawString("Press ENTER to play!", BOARD_WIDTH / 2 - 115, 200);
+            showInstructions(g);
             return;
         }
 
@@ -204,6 +202,13 @@ public class GameBoard extends JPanel {
         }
     }
 
+    private void hideLeaderboard() {
+        for (Component comp : getComponents()) {
+            if (comp == leaderboardPanel)
+                comp.setVisible(false);
+        }
+    }
+
     private void showMenuButtons() {
         for (Component comp : getComponents()) {
             if (comp instanceof JButton) {
@@ -224,7 +229,7 @@ public class GameBoard extends JPanel {
         JButton easyButton = new JButton("Easy");
         JButton mediumButton = new JButton("Medium");
         JButton hardButton = new JButton("Hard");
-        JButton leaderButton = new JButton("LeaderBoard");
+        JButton leaderButton = new JButton("Leaderboard");
         JButton backButton = new JButton("Back");
 
         easyButton.setBounds(BOARD_WIDTH / 2 - 300, BOARD_HEIGHT / 2, 200, 40);
@@ -259,25 +264,23 @@ public class GameBoard extends JPanel {
         });
 
         leaderButton.addActionListener(_ -> {
-            //show leader board
+            showLeaderboard();
             hideMenuButtons();
             showBackButton(backButton);
         });
 
         backButton.addActionListener(_ -> {
-            try {
-                resetGame();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            hideLeaderboard();
+            showMenuButtons();
         });
+
     }
 
-    public void loadFont() {
+    public void loadFont(int size) {
         try {
             customFont = Font.createFont(Font.TRUETYPE_FONT,
                             Objects.requireNonNull(getClass().getResourceAsStream("/Flappy Bird Assets/Background/font.ttf")))
-                    .deriveFont(Font.PLAIN, 32f);
+                    .deriveFont(Font.PLAIN, size);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(customFont);
         } catch (IOException | FontFormatException e) {
@@ -298,21 +301,35 @@ public class GameBoard extends JPanel {
 
     public void showScore(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
-
         g2d.setFont(Objects.requireNonNullElseGet(customFont, () -> new Font("Arial", Font.PLAIN, 36)));
 
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
         g2d.setColor(Color.WHITE);
 
         String scoreText = "Score: " + playerSprite.getScore();
-        String spaceText = "Space: " + playerSprite.getSpace();
         FontMetrics fm = g2d.getFontMetrics();
         int textWidth = fm.stringWidth(scoreText);
         int x = (BOARD_WIDTH - textWidth) / 2;
-        int y = 50;
+        int y = 70;
 
         g2d.drawString(scoreText, x, y);
-        g2d.drawString(spaceText, x, y + fm.getAscent());
+        g2d.dispose();
+    }
+
+    public void showInstructions(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setFont(Objects.requireNonNullElseGet(customFont, () -> new Font("Arial", Font.PLAIN, 36)));
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+        g2d.setColor(Color.WHITE);
+
+        String diff = "Select a difficulty to play ↓";
+        FontMetrics fm = g2d.getFontMetrics();
+        int textWidth = fm.stringWidth(diff);
+        int x = (BOARD_WIDTH - textWidth) / 2;
+        int y = 350;
+
+        g2d.drawString(diff, x, y);
+
         g2d.dispose();
     }
 
@@ -364,5 +381,47 @@ public class GameBoard extends JPanel {
         dao.insertScore(scoreInfo);
     }
 
+    private void showLeaderboard() {
+        if (leaderboardPanel != null) {
+            this.remove(leaderboardPanel);
+        }
 
+        ScoreDAO scoreDAO = new ScoreDAO();
+        List<ScoreInfo> scores = scoreDAO.getAllScores();
+
+        leaderboardPanel = new JPanel();
+        leaderboardPanel.setLayout(new BorderLayout());
+        leaderboardPanel.setBackground(Color.LIGHT_GRAY);
+
+        int panelWidth = 600;
+        int panelHeight = 250;
+
+        int x = (BOARD_WIDTH - panelWidth) / 2;
+        int y = (BOARD_HEIGHT - panelHeight) / 2;
+
+        leaderboardPanel.setBounds(x, y, panelWidth, panelHeight);
+
+        JTextArea leaderboardArea = getJTextArea(scores);
+        leaderboardPanel.add(new JScrollPane(leaderboardArea), BorderLayout.CENTER);
+
+        this.setLayout(null);
+        this.add(leaderboardPanel);
+        leaderboardPanel.setVisible(true);
+        this.repaint();
+    }
+
+    private static JTextArea getJTextArea(List<ScoreInfo> scores) {
+        JTextArea leaderboardArea = new JTextArea();
+        leaderboardArea.setEditable(false);
+        leaderboardArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+        StringBuilder sb = new StringBuilder(" Player Name                          | Score                | Difficulty\n");
+        sb.append("----------------------------------------------------------------------------------\n");
+        for (ScoreInfo score : scores) {
+            sb.append(String.format(" %-10s                           | %-4d                 | %-10s\n",
+                    score.getName(), score.getScore(), score.getDifficulty()));
+        }
+        leaderboardArea.setText(sb.toString());
+        return leaderboardArea;
+    }
 }
