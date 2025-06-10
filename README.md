@@ -29,23 +29,23 @@ The application uses MVC (Model-View-Controller) architecture to separate game l
 - **Real-time State**: In-memory game object tracking
 
 ### Data Representation
-- Game objects represented as Java classes with position, velocity, and state properties
-- Database schema with tables for scores, players, and game sessions
+- Game objects represented as Java classes with position and state properties
+- Database schema with table for scores, player names, and difficulty
 - JSON-like configuration structure for difficulty settings
 
 ### Usage
 1. Launch application and select difficulty level
 2. Use spacebar to control bird flight
 3. Navigate through pipe obstacles
-4. Scores automatically saved to database
+4. Write your name and save your score (not mandatory)
 
 ## Features
 - **Three Difficulty Modes**:
   - 🟢 **Easy**: Slower pipes, larger gaps, forgiving physics
   - 🟡 **Medium**: Balanced challenge (classic Flappy Bird experience)
   - 🔴 **Hard**: Lightning-fast pipes, narrow gaps, precise timing required
-- Simple one-button controls (spacebar/tap)
-- Score tracking with high score persistence
+- Simple one-button controls (spacebar)
+- Score tracking 
 - Responsive gameplay with smooth animations
 
 ![Gameplay Screenshot](Flappy1.PNG)
@@ -65,7 +65,7 @@ The application uses MVC (Model-View-Controller) architecture to separate game l
 ### Test Data & Results
 - Performance testing across all difficulty levels
 - Score validation and persistence verification
-- Collision detection accuracy testing
+- Collision detection accuracy testing 
 
 ## Conclusions
 The project successfully implements a scalable Flappy Bird clone with configurable difficulty and persistent data storage. The MVC architecture ensures maintainable code, while the MySQL integration provides reliable score tracking. Future enhancements could include multiplayer support and additional game modes.
