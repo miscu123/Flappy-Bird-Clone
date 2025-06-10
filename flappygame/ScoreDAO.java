@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScoreDAO {
+    // making the connection to the database
+    // using a mysql-connector (can be found in the 'lib' folder)
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/leaderboard";
     private static final String USER = "root";
     private static final String PASS = "1234";
 
+    // insert the values into the database
     public void insertScore(ScoreInfo scoreInfo) {
         String sql = "INSERT INTO leaderboard (PlayerName, Score, Difficulty, Date) VALUES (?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
@@ -30,6 +33,7 @@ public class ScoreDAO {
         }
     }
 
+    // function that returns the scores and sorts them in non-increasing order
     public List<ScoreInfo> getAllScores() {
         List<ScoreInfo> scores = new ArrayList<>();
         String sql = "SELECT PlayerName, Score, Difficulty FROM leaderboard ORDER BY Score DESC";

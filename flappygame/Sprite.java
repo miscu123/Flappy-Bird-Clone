@@ -5,10 +5,10 @@ import java.awt.image.BufferedImage;
 
 public class Sprite {
     protected int x, y, width, height;
-    protected int dy;
     protected Color bgColor = Color.GREEN;
     protected BufferedImage image = null;
 
+    // default constructor to initialize a sprite (player / pipe)
     public Sprite(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -16,20 +16,7 @@ public class Sprite {
         this.height = height;
     }
 
-    public void move(){
-        dy += 1;
-        y += dy;
-
-        if (y > GameBoard.BOARD_HEIGHT - height) {
-            y = GameBoard.BOARD_HEIGHT - height;
-            dy = 0;
-        }
-    }
-
-    public void jump(){
-        dy = -10;
-    }
-
+    // function to draw the sprite
     public void draw(Graphics g){
         if(image == null){
             g.setColor(bgColor);
@@ -40,6 +27,7 @@ public class Sprite {
         }
     }
 
+    // helper functions for getting the sprite bounds / X position
     public Rectangle getBounds(){
         return new Rectangle(x,y,width,height);
     }
@@ -47,5 +35,4 @@ public class Sprite {
     public int getX() {
         return x;
     }
-
 }

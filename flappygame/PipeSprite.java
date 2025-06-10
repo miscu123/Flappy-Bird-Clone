@@ -14,6 +14,7 @@ public class PipeSprite {
     private final BufferedImage topPipeImg;
     private final BufferedImage bottomPipeImg;
 
+    // constructor for loading a pipe with certain specifications
     public PipeSprite(int x, int height, int gap, int speed, BufferedImage topPipeImg, BufferedImage bottomPipeImg) {
         this.x = x;
         this.width = 80;
@@ -25,10 +26,12 @@ public class PipeSprite {
         this.bottomPipeImg = bottomPipeImg;
     }
 
+    // function to move the pipes to the left
     public void move() {
         x -= speed;
     }
 
+    // function to draw the pipes
     public void draw(Graphics g) {
         if (topPipeImg != null && bottomPipeImg != null) {
             g.drawImage(topPipeImg, x, 0, width, topHeight, null);
@@ -40,6 +43,8 @@ public class PipeSprite {
         }
     }
 
+    // functions created to gather info about the pipes
+    // created to ease our work with game logic and for clearer code
     public Rectangle getTopBounds() {
         return new Rectangle(x, 0, width, topHeight);
     }
@@ -65,4 +70,3 @@ public class PipeSprite {
     }
 
 }
-

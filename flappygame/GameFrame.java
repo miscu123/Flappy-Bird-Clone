@@ -1,3 +1,4 @@
+// The GameFrame class initializes the canvas and creates the game board
 package flappygame;
 
 import javax.swing.*;

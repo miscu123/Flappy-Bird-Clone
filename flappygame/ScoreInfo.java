@@ -1,29 +1,19 @@
 package flappygame;
 
 public class ScoreInfo {
-    private int id;
-    private String name;
-    private int score;
-    private String difficulty;
+    private final String name;
+    private final int score;
+    private final String difficulty;
 
+    // constructor to store the player info
     public ScoreInfo(String name, int score, String difficulty) {
         this.name = name;
         this.score = score;
         this.difficulty = difficulty;
     }
 
-    public int getId() { return id; }
+    // helper functions
     public String getName() { return name; }
     public int getScore() { return score; }
     public String getDifficulty() { return difficulty; }
-
-    public void setId(int id) { this.id = id; }
-    public void setName(String name) { this.name = name; }
-    public void setScore(int score) { this.score = score; }
-    public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
-
-    @Override
-    public String toString() {
-        return name + " - " + score + " (" + difficulty + ")";
-    }
 }
