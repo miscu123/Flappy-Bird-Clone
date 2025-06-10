@@ -71,6 +71,6 @@ The application uses MVC (Model-View-Controller) architecture to separate game l
 The project successfully implements a scalable Flappy Bird clone with configurable difficulty and persistent data storage. The MVC architecture ensures maintainable code, while the MySQL integration provides reliable score tracking. Future enhancements could include multiplayer support and additional game modes.
 
 ## Bibliography
-1. ![https://www.youtube.com/watch?v=9ntKSLLDeSs]
+1. https://www.youtube.com/watch?v=9ntKSLLDeSs
 2. Courses and Laboratories in MAP
    
