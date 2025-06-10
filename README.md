@@ -14,7 +14,7 @@ A Java implementation of the classic Flappy Bird game with configurable difficul
 Development of a customized Flappy Bird version featuring three configurable difficulty levels, persistent scoring system, and responsive graphical interface. The challenge lies in balancing difficulty progression and implementing smooth gameplay mechanics.
 
 ## Proposed Solution
-The application uses MVC (Model-View-Controller) architecture to separate game logic, graphical interface, and data management. The difficulty system dynamically adjusts game parameters (speed, gap size, physics) to create distinct gameplay experiences.
+The application uses MVC (Model-View-Controller) architecture to separate game logic, graphical interface, and data management. The difficulty system dynamically adjusts game parameters (speed, gap size, pipe interval) to create distinct gameplay experiences.
 
 ## Application Overview
 
