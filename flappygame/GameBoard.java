@@ -1,5 +1,3 @@
-// The GameBoard class is the game engine class
-// Here the game is running and working as it should
 package flappygame;
 
 import javax.swing.*;
@@ -12,50 +10,85 @@ import java.util.ArrayList;
 import java.awt.Rectangle;
 import java.util.Objects;
 
+/**
+ * The GameBoard class is the game engine class
+ * Here the game is running and working as it should
+ */
 public class GameBoard extends JPanel {
 
-    // game frame size
+    /**
+     * The width of the game board
+     */
     public static int BOARD_WIDTH = 1600;
+    /**
+     * The height of the game board
+     */
     public static int BOARD_HEIGHT = 800;
 
-    // background for menu & easy/medium/hard levels
+    /**
+     * Background image for current game state
+     */
     public BufferedImage backgroundImage;
     private BufferedImage backgroundEasy;
     private BufferedImage backgroundMedium;
     private BufferedImage backgroundHard;
 
-    // player variable
+    /**
+     * The player character sprite
+     */
     PlayerSprite playerSprite;
 
-    // we need to know our game state
-    // by default 'MENU'
+    /**
+     * Current game state
+     */
     public GameState gameState = GameState.MENU;
+
+    /**
+     * Possible game states
+     */
     public enum GameState {
         MENU,
         PLAYING
     }
 
-    // list for the pipes
+    /**
+     * List of active pipes in the game
+     */
     List<PipeSprite> pipes = new ArrayList<>();
+    /**
+     * Counter for pipe spawning timing
+     */
     int pipeSpawnCounter = 0;
 
-    // custom font
+    /**
+     * Custom font used in the game
+     */
     Font customFont;
 
-    // for the leaderboard panel
+    /**
+     * Panel for displaying leaderboard
+     */
     private JPanel leaderboardPanel;
 
-    // difficulty setting
-    // by default 'EASY'
+    /**
+     * Current game difficulty level
+     */
     private Difficulty difficulty = Difficulty.EASY;
+
+    /**
+     * Available difficulty levels
+     */
     public enum Difficulty {
         EASY,
         MEDIUM,
         HARD
     }
 
-    // constructor
-    public GameBoard(){
+    /**
+     * Constructs the game board and initializes components.
+     * Sets up key listeners, loads resources, and creates game timer.
+     */
+    public GameBoard() {
         super();
         setFocusable(true);
         setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
@@ -68,8 +101,12 @@ public class GameBoard extends JPanel {
         createTimer();
     }
 
+    /**
+     * Paints the game components on the board.
+     *
+     * @param g The Graphics object used for painting
+     */
     @Override
-    // for 'painting' the game board
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (backgroundImage != null)
@@ -90,18 +127,19 @@ public class GameBoard extends JPanel {
         showScore(g);
     }
 
-    // game initiator
+    /**
+     * Initializes game components based on current difficulty.
+     * Loads appropriate player sprite and background.
+     */
     private void initGame() {
         BufferedImage player = null;
 
-        // switching background based on level difficulty
         switch (difficulty) {
             case EASY -> backgroundImage = backgroundEasy;
             case MEDIUM -> backgroundImage = backgroundMedium;
             case HARD -> backgroundImage = backgroundHard;
         }
 
-        // switching player skin based on level difficulty
         try {
             player = switch (difficulty) {
                 case EASY ->
@@ -115,21 +153,33 @@ public class GameBoard extends JPanel {
             System.err.println("Player image not found for difficulty: " + difficulty);
         }
 
-        // we initialize our player at coords 'x' & 'y'
         playerSprite = new PlayerSprite(BOARD_WIDTH / 2 - 500, BOARD_HEIGHT / 2 - 20, 70, 70, player);
         pipes.clear();
         pipeSpawnCounter = 0;
     }
 
+    /**
+     * Updates player position and state.
+     */
     private void updatePlayer() {
         playerSprite.move();
     }
 
+    /**
+     * Gets the player sprite instance.
+     *
+     * @return The current player sprite
+     */
     public PlayerSprite getPlayerSprite() {
         return playerSprite;
     }
 
-    // function for updating the pipes interval, speed & gap
+    /**
+     * Updates all pipes in the game.
+     * Handles spawning, movement, scoring and removal of pipes.
+     *
+     * @throws IOException if pipe images cannot be loaded
+     */
     private void updatePipes() throws IOException {
         pipeSpawnCounter++;
 
@@ -139,7 +189,6 @@ public class GameBoard extends JPanel {
         BufferedImage topPipeImg;
         BufferedImage bottomPipeImg;
 
-        // custom values for interval, gap & speed based on chosen difficulty
         switch (difficulty) {
             case EASY:
                 pipeInterval = 130;
@@ -171,22 +220,18 @@ public class GameBoard extends JPanel {
                 break;
         }
 
-        // if we reached the pipe interval, we draw new pipes and we reset the counter
         if (pipeSpawnCounter >= pipeInterval) {
             pipes.add(new PipeSprite(BOARD_WIDTH, BOARD_HEIGHT, gap, speed, topPipeImg, bottomPipeImg));
             pipeSpawnCounter = 0;
         }
 
-        // we move the existing pipes and check for scoring or removal
         List<PipeSprite> toRemove = new ArrayList<>();
         for (PipeSprite pipe : pipes) {
             pipe.move();
-            // if the player successfully passed the pipes, we add to the score
             if (!pipe.isPassed() && playerSprite.getX() > pipe.getX() + pipe.getWidth()) {
                 pipe.setPassed(true);
                 playerSprite.addScore(1);
             }
-            // if the pipe is off-screen we mark it to be removed
             if (pipe.getX() + 80 < 0) {
                 toRemove.add(pipe);
             }
@@ -194,14 +239,20 @@ public class GameBoard extends JPanel {
         pipes.removeAll(toRemove);
     }
 
-    // function to initiate the game and set the game state to 'PLAYING'
+    /**
+     * Starts the game by initializing components and changing state to PLAYING.
+     */
     public void startGame() {
         initGame();
         gameState = GameState.PLAYING;
     }
 
-    // function for the game to be reset whenever a player loses or 'R' is pressed
-    // we need to clear and reset all variables
+    /**
+     * Resets the game to menu state.
+     * Clears all game objects and resets variables.
+     *
+     * @throws IOException if menu background image cannot be loaded
+     */
     public void resetGame() throws IOException {
         gameState = GameState.MENU;
         backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Background/MenuBkg.png")));
@@ -212,7 +263,11 @@ public class GameBoard extends JPanel {
         repaint();
     }
 
-    // function to determine whether of not the player collided with a pipe of went off-screen
+    /**
+     * Determines whether the player collided with a pipe or went off-screen
+     *
+     * @return true if collision occurred, false otherwise
+     */
     private boolean checkCollision() {
         Rectangle playerBounds = playerSprite.getBounds();
 
@@ -224,7 +279,9 @@ public class GameBoard extends JPanel {
         return false;
     }
 
-    // whenever we press play of we want to see the leaderboard, we hide the menu buttons
+    /**
+     * Hides the menu buttons when we press play or want to see the leaderboard
+     */
     private void hideMenuButtons() {
         for (Component comp : getComponents()) {
             if (comp instanceof JButton) {
@@ -233,6 +290,9 @@ public class GameBoard extends JPanel {
         }
     }
 
+    /**
+     * Hides the leaderboard panel
+     */
     private void hideLeaderboard() {
         for (Component comp : getComponents()) {
             if (comp == leaderboardPanel)
@@ -240,6 +300,9 @@ public class GameBoard extends JPanel {
         }
     }
 
+    /**
+     * Shows the menu buttons
+     */
     private void showMenuButtons() {
         for (Component comp : getComponents()) {
             if (comp instanceof JButton) {
@@ -248,6 +311,11 @@ public class GameBoard extends JPanel {
         }
     }
 
+    /**
+     * Shows the back button
+     *
+     * @param backButton the back button to show
+     */
     public void showBackButton(JButton backButton) {
         for (Component comp : getComponents()) {
             if (comp == backButton) {
@@ -256,7 +324,9 @@ public class GameBoard extends JPanel {
         }
     }
 
-    // function to draw the buttons on screen
+    /**
+     * Draws the buttons on screen
+     */
     public void drawButtons() {
         JButton easyButton = new JButton("Easy");
         JButton mediumButton = new JButton("Medium");
@@ -264,7 +334,7 @@ public class GameBoard extends JPanel {
         JButton leaderButton = new JButton("Leaderboard");
         JButton backButton = new JButton("Back");
 
-        // coords and size
+        /** coordinates and size */
         easyButton.setBounds(BOARD_WIDTH / 2 - 300, BOARD_HEIGHT / 2, 200, 40);
         mediumButton.setBounds(BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2, 200, 40);
         hardButton.setBounds(BOARD_WIDTH / 2 + 100, BOARD_HEIGHT / 2, 200, 40);
@@ -278,7 +348,7 @@ public class GameBoard extends JPanel {
         add(leaderButton);
         add(backButton);
 
-        // create individual events for whenever a specific button is pressed
+        /** create individual events for whenever a specific button is pressed */
         easyButton.addActionListener(_ -> {
             difficulty = Difficulty.EASY;
             startGame();
@@ -307,10 +377,13 @@ public class GameBoard extends JPanel {
             hideLeaderboard();
             showMenuButtons();
         });
-
     }
 
-    // custom font
+    /**
+     * Loads custom font with specified size
+     *
+     * @param size the font size to use
+     */
     public void loadFont(int size) {
         try {
             customFont = Font.createFont(Font.TRUETYPE_FONT,
@@ -323,7 +396,9 @@ public class GameBoard extends JPanel {
         }
     }
 
-    // background loading function
+    /**
+     * Loads background images for the game
+     */
     public void loadBackgroundImage() {
         try {
             backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/Flappy Bird Assets/Background/MenuBkg.png")));
@@ -335,7 +410,11 @@ public class GameBoard extends JPanel {
         }
     }
 
-    // function for the player to see the score while playing
+    /**
+     * Displays the player's score while playing
+     *
+     * @param g the Graphics object to draw with
+     */
     public void showScore(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setFont(Objects.requireNonNullElseGet(customFont, () -> new Font("Arial", Font.PLAIN, 36)));
@@ -353,7 +432,11 @@ public class GameBoard extends JPanel {
         g2d.dispose();
     }
 
-    // instructions in the main menu
+    /**
+     * Displays instructions in the main menu
+     *
+     * @param g the Graphics object to draw with
+     */
     public void showInstructions(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setFont(Objects.requireNonNullElseGet(customFont, () -> new Font("Arial", Font.PLAIN, 36)));
@@ -371,8 +454,10 @@ public class GameBoard extends JPanel {
         g2d.dispose();
     }
 
-    // function to update the player and the pipes at regular intervals
-    // also created to check if the player lost or not and if so, to save the score and reset the game
+    /**
+     * Function to update the player and the pipes at regular intervals
+     * Also created to check if the player lost or not and if so, to save the score and reset the game
+     */
     public void createTimer() {
         Timer timer = new Timer(1, _ -> {
             if (gameState == GameState.PLAYING && playerSprite != null) {
@@ -400,17 +485,19 @@ public class GameBoard extends JPanel {
         timer.start();
     }
 
-    // function for saving the score to the database
+    /**
+     * Function for saving the score to the database
+     */
     private void saveScore() {
         String playerName = JOptionPane.showInputDialog(this, "Enter your name:", "Game Over", JOptionPane.PLAIN_MESSAGE);
 
         if (playerName == null) {
-            // Cancel pressed
+            /** Cancel pressed */
             return;
         }
 
         if (playerName.trim().isEmpty()) {
-            // OK pressed but nothing typed
+            /** OK pressed but nothing typed */
             playerName = "Anonymous";
         }
 
@@ -422,8 +509,10 @@ public class GameBoard extends JPanel {
         dao.insertScore(scoreInfo);
     }
 
-    // function to show the leaderboard in real time
-    // leaderboard refreshed every time we load it
+    /**
+     * Function to show the leaderboard in real time
+     * Leaderboard refreshed every time we load it
+     */
     private void showLeaderboard() {
         if (leaderboardPanel != null) {
             this.remove(leaderboardPanel);
@@ -453,7 +542,12 @@ public class GameBoard extends JPanel {
         this.repaint();
     }
 
-    // function to show the leaderboard
+    /**
+     * Function to show the leaderboard
+     *
+     * @param scores the list of scores to display
+     * @return a JTextArea containing the formatted leaderboard
+     */
     private static JTextArea getJTextArea(List<ScoreInfo> scores) {
         JTextArea leaderboardArea = new JTextArea();
         leaderboardArea.setEditable(false);

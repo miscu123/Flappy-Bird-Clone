@@ -8,7 +8,13 @@ public class Sprite {
     protected Color bgColor = Color.GREEN;
     protected BufferedImage image = null;
 
-    // default constructor to initialize a sprite (player / pipe)
+    /**
+     * Default constructor to initialize a sprite (player / pipe)
+     * @param x the x position of the sprite
+     * @param y the y position of the sprite
+     * @param width the width of the sprite
+     * @param height the height of the sprite
+     */
     public Sprite(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -16,7 +22,10 @@ public class Sprite {
         this.height = height;
     }
 
-    // function to draw the sprite
+    /**
+     * Function to draw the sprite
+     * @param g the Graphics object to draw with
+     */
     public void draw(Graphics g){
         if(image == null){
             g.setColor(bgColor);
@@ -27,11 +36,20 @@ public class Sprite {
         }
     }
 
-    // helper functions for getting the sprite bounds / X position
+    /** Helper functions for getting the sprite bounds / X position */
+
+    /**
+     * Gets the bounding rectangle of the sprite
+     * @return Rectangle representing the sprite's bounds
+     */
     public Rectangle getBounds(){
         return new Rectangle(x,y,width,height);
     }
 
+    /**
+     * Gets the x position of the sprite
+     * @return the x coordinate of the sprite
+     */
     public int getX() {
         return x;
     }

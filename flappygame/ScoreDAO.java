@@ -6,25 +6,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScoreDAO {
-    // making the connection to the database
-    // using a mysql-connector (can be found in the 'lib' folder)
+    /**
+     * Making the connection to the database
+     * Using a mysql-connector (can be found in the 'lib' folder)
+     */
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/leaderboard";
     private static final String USER = "root";
     private static final String PASS = "1234";
 
-    // insert the values into the database
+    /**
+     * Insert the values into the database
+     * @param scoreInfo the ScoreInfo object containing player data to insert
+     */
     public void insertScore(ScoreInfo scoreInfo) {
         String sql = "INSERT INTO leaderboard (PlayerName, Score, Difficulty, Date) VALUES (?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            // Player Name
+            /** Player Name */
             ps.setString(1, scoreInfo.getName());
-            // Player Score
+            /** Player Score */
             ps.setInt(2, scoreInfo.getScore());
-            // The difficulty the player played
+            /** The difficulty the player played */
             ps.setString(3, scoreInfo.getDifficulty());
-            // The date the player played in
+            /** The date the player played in */
             ps.setDate(4, Date.valueOf(LocalDate.now()));
 
             ps.executeUpdate();
@@ -33,7 +38,10 @@ public class ScoreDAO {
         }
     }
 
-    // function that returns the scores and sorts them in non-increasing order
+    /**
+     * Function that returns the scores and sorts them in non-increasing order
+     * @return List of ScoreInfo objects sorted by score in descending order
+     */
     public List<ScoreInfo> getAllScores() {
         List<ScoreInfo> scores = new ArrayList<>();
         String sql = "SELECT PlayerName, Score, Difficulty FROM leaderboard ORDER BY Score DESC";
