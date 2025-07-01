@@ -28,10 +28,10 @@ public class PlayerSprite extends Sprite {
      * Function to simulate the gravity (constant)
      */
     public void move() {
-        float gravity = 1.2f;
+        float gravity = 1.3f;
         dy += gravity;
 
-        float maxFallSpeed = 7;
+        float maxFallSpeed = 7.4f;
         if (dy > maxFallSpeed)
             dy = maxFallSpeed;
 
