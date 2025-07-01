@@ -54,7 +54,7 @@ The application uses MVC (Model-View-Controller) architecture to separate game l
 
 ## Installation & Running
 ### Requirements
-- Java JDK 11 or higher
+- Javac 24 version
 - MySQL Server
 
 ### Setup
