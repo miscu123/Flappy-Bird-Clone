@@ -41,9 +41,9 @@ The application uses MVC (Model-View-Controller) architecture to separate game l
 
 ## Features
 - **Three Difficulty Modes**:
-  - 🟢 **Easy**: Slower pipes, larger gaps, forgiving physics
-  - 🟡 **Medium**: Balanced challenge (classic Flappy Bird experience)
-  - 🔴 **Hard**: Lightning-fast pipes, narrow gaps, precise timing required
+  -  **Easy**: Slower pipes, larger gaps, forgiving physics
+  -  **Medium**: Balanced challenge (classic Flappy Bird experience)
+  -  **Hard**: Lightning-fast pipes, narrow gaps, precise timing required
 - Simple one-button controls (spacebar)
 - Score tracking 
 - Responsive gameplay with smooth animations
